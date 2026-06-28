@@ -6,7 +6,16 @@ namespace MedixCare.DataAccess.ModelConfigurations
     {
         public void Configure(EntityTypeBuilder<DoctorSchedule> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(ds => ds.Id);
+            builder.Property(ds => ds.StartTime)
+                   .IsRequired();
+            builder.Property(ds => ds.EndTime).IsRequired();
+            builder.Property(ds => ds.DayOfWeek).IsRequired();
+
+            builder.HasOne(ds => ds.Doctor)
+                   .WithMany(d => d.DoctorSchedules)
+                   .HasForeignKey(ds => ds.DoctorId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

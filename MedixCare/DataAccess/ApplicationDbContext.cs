@@ -27,16 +27,9 @@ namespace MedixCare.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DoctorEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PatientHistoryEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PrescriptionEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PrescriptionItemsEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DoctorLeavesEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DoctorScheduleEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClinicEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(LabTestEntityTypeConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PatientEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppointmentEntityTypeConfiguration).Assembly);
+
         }
     }
 }

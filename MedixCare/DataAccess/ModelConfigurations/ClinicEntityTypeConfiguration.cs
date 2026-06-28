@@ -6,7 +6,11 @@ namespace MedixCare.DataAccess.ModelConfigurations
     {
         public void Configure(EntityTypeBuilder<Clinic> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(c => c.Id);
+            builder.Property(c => c.Name)
+                .IsRequired()
+                .HasMaxLength(150);
+            builder.HasMany(c => c.Doctors).WithOne(d => d.Clinic);
         }
     }
 }

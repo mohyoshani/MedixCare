@@ -4,7 +4,19 @@
     {
         public void Configure(EntityTypeBuilder<Prescription> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(p => p.Id);
+
+            builder.Property(p => p.Diagnosis)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            builder.Property(p => p.CreatedAt)
+                .IsRequired();
+
+            builder.HasOne(p => p.Appointment)
+                .WithMany() 
+                .HasForeignKey(p => p.AppointmentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

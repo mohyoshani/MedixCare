@@ -1,8 +1,5 @@
 ﻿namespace MedixCare.Models
 {
-  
-   
-  
     public class DoctorSchedule
     {
         public int Id { get; set; }

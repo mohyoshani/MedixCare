@@ -6,7 +6,38 @@ namespace MedixCare.DataAccess.ModelConfigurations
     {
         public void Configure(EntityTypeBuilder<LabTest> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(lt => lt.Id);
+
+            builder.Property(lt => lt.TestName)
+                   .IsRequired()
+                   .HasMaxLength(150);
+
+            builder.Property(lt => lt.TestType)
+                   .IsRequired()
+                   .HasMaxLength(100);
+
+            builder.Property(lt => lt.LabName)
+                   .IsRequired()
+                   .HasMaxLength(150);
+
+            builder.Property(lt => lt.Summary)
+                   .HasMaxLength(1000);
+
+            builder.Property(lt => lt.TestFileName)
+                   .HasMaxLength(255); 
+
+            builder.Property(lt => lt.TestDate)
+                   .IsRequired();
+
+            builder.HasOne(lt => lt.Patient)
+                   .WithMany()
+                   .HasForeignKey(lt => lt.PatientId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(lt => lt.Appointment)
+                   .WithMany()
+                   .HasForeignKey(lt => lt.AppointmentId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

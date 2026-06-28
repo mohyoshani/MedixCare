@@ -8,7 +8,7 @@ namespace MedixCare.Repository.IRepositorie
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
-        protected readonly ILogger<Repository<T>> _logger;
+        protected readonly ILogger _logger;
         public Repository(ApplicationDbContext context, ILogger<Repository<T>> logger)
         {
             _context = context;

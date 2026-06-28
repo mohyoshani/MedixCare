@@ -5,7 +5,6 @@
         Phone,
         Online,
         WalkIn,
-        Referral
     }
     public enum VisitType
     {

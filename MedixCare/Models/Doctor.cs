@@ -9,7 +9,8 @@
         public decimal ExaminationFee { get; set; }
         public decimal FollowUpFee { get; set; }
         public int ClinicId { get; set; }
-
+        public bool IsActive { get; set; } 
+        public int FollowUpDays { get; set; }
         public Clinic? Clinic { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new List<DoctorSchedule>();

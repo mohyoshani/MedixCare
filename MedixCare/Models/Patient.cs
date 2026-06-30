@@ -13,6 +13,7 @@
         public DateOnly DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public Gender Gender { get; set; }
+        public bool IsActive { get; set; } 
         public ICollection<PatientHistory> PatientHistories { get; set; } = new List<PatientHistory>();
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }

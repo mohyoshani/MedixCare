@@ -4,16 +4,19 @@ using MedixCare.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MedixCare.DataAccess.Migrations
+namespace MedixCare.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260630142640_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,9 +204,6 @@ namespace MedixCare.DataAccess.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PatientId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Summary")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -232,8 +232,6 @@ namespace MedixCare.DataAccess.Migrations
                     b.HasIndex("AppointmentId");
 
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("PatientId1");
 
                     b.ToTable("LabTests");
                 });
@@ -438,14 +436,10 @@ namespace MedixCare.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("MedixCare.Models.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("LabTests")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("MedixCare.Models.Patient", null)
-                        .WithMany("LabTests")
-                        .HasForeignKey("PatientId1");
 
                     b.Navigation("Appointment");
 

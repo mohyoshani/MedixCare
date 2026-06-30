@@ -30,7 +30,7 @@ namespace MedixCare.DataAccess.ModelConfigurations
                    .IsRequired();
 
             builder.HasOne(lt => lt.Patient)
-                   .WithMany()
+                   .WithMany(lt=>lt.LabTests)
                    .HasForeignKey(lt => lt.PatientId)
                    .OnDelete(DeleteBehavior.Restrict);
 

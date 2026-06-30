@@ -4,19 +4,16 @@ using MedixCare.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MedixCare.DataAccess.Migrations
+namespace MedixCare.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260630115438_AddingIsActiveFeature")]
-    partial class AddingIsActiveFeature
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -436,7 +433,7 @@ namespace MedixCare.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("MedixCare.Models.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("LabTests")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -511,6 +508,8 @@ namespace MedixCare.DataAccess.Migrations
             modelBuilder.Entity("MedixCare.Models.Patient", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("LabTests");
 
                     b.Navigation("PatientHistories");
                 });

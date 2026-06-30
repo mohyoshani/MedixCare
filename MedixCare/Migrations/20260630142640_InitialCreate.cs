@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MedixCare.DataAccess.Migrations
+namespace MedixCare.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -34,7 +34,8 @@ namespace MedixCare.DataAccess.Migrations
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false)
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,7 +52,9 @@ namespace MedixCare.DataAccess.Migrations
                     Specialty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ExaminationFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FollowUpFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ClinicId = table.Column<int>(type: "int", nullable: false)
+                    ClinicId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    FollowUpDays = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,6 +136,7 @@ namespace MedixCare.DataAccess.Migrations
                     StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
+                    MaxPatients = table.Column<int>(type: "int", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

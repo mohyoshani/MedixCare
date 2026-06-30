@@ -16,6 +16,7 @@
         public bool IsActive { get; set; } 
         public ICollection<PatientHistory> PatientHistories { get; set; } = new List<PatientHistory>();
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public ICollection<LabTest> LabTests { get; set; } = new List<LabTest>();
     }
 
 }

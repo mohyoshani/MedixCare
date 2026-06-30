@@ -35,7 +35,7 @@ namespace MedixCare.DataAccess.ModelConfigurations
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(lt => lt.Appointment)
-                   .WithMany()
+                   .WithMany(lt => lt.LabTests)
                    .HasForeignKey(lt => lt.AppointmentId)
                    .OnDelete(DeleteBehavior.Restrict);
         }

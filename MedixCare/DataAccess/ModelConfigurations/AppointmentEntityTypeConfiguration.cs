@@ -11,6 +11,7 @@ namespace MedixCare.DataAccess.ModelConfigurations
             builder.Property(a => a.CreatedAt).IsRequired();
             builder.Property(a => a.BookingChannel).IsRequired();
             builder.Property(a => a.VisitType).IsRequired();
+
             builder.HasOne(a => a.Doctor)
                    .WithMany(d => d.Appointments)
                    .HasForeignKey(a => a.DoctorId)

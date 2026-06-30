@@ -14,8 +14,8 @@
                 .IsRequired();
 
             builder.HasOne(p => p.Appointment)
-                .WithMany() 
-                .HasForeignKey(p => p.AppointmentId)
+                .WithOne(a => a.Prescription)
+                .HasForeignKey<Prescription>(p => p.AppointmentId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

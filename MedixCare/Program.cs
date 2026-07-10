@@ -1,4 +1,5 @@
 using MedixCare.DataAccess;
+using Microsoft.AspNetCore.Identity; // تأكد من وجود الـ using ده للـ IdentityRole و ApplicationUser
 using Microsoft.EntityFrameworkCore;
 
 namespace MedixCare

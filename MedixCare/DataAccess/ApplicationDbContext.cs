@@ -1,10 +1,11 @@
 ﻿using MedixCare.DataAccess.ModelConfigurations;
 using MedixCare.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedixCare.DataAccess
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -22,6 +23,7 @@ namespace MedixCare.DataAccess
         public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<LabTest> LabTests { get; set; }
+        public DbSet<ApplicationUserOTP> applicationUserOTP { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

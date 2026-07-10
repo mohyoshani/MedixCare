@@ -6,3 +6,7 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using System.IO;
 global using MedixCare.Helper;
 global using MedixCare.Utility;
+global using Microsoft.AspNetCore.Identity;
+global using System.ComponentModel.DataAnnotations;
+global using MedixCare.Utility.Validations;
+global using MedixCare.ViewModels;

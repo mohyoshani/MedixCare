@@ -36,8 +36,12 @@
             //Code Logic to save the file
 
             var subFolder = attachmentType.ToString();
+
+
             //fileName 
+
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+           
             //filePath
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MedicalAttachments", subFolder);
             if (!Directory.Exists(folderPath))

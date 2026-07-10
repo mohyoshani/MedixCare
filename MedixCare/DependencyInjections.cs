@@ -9,6 +9,7 @@ namespace MedixCare
     {
         public static void InjectAll(this IServiceCollection services)
         {
+            services.AddTransient<EmailSender>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
             services.AddScoped<IDbInitializer, DbInitializer>();

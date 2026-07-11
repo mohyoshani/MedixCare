@@ -13,28 +13,22 @@ namespace MedixCare.Utility.EmailService
         }
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var smtp = _configuration.GetSection("Smtp");
-            var host = smtp["Host"] ?? "smtp.gmail.com";
-            var port = int.TryParse(smtp["Port"], out var p) ? p : 587;
-            var user = smtp["User"];
-            var pass = smtp["Password"];
-            var from = smtp["From"] ?? user;
-
-            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
-            {
-                throw new InvalidOperationException("SMTP credentials are not configured. Set Smtp:User and Smtp:Password in configuration.");
-            }
-
-            var client = new SmtpClient(host, port)
+            var client = new SmtpClient("smtp.gmail.com", 587)
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(user, pass)
+                Credentials = new NetworkCredential("moh.yos.hani@gmail.com", "sklh qryz wdpp qlwr")
             };
 
-            var message = new MailMessage(from!, email, subject, htmlMessage) { IsBodyHtml = true };
-
-            return client.SendMailAsync(message);
+            return client.SendMailAsync(
+                new MailMessage(from: "moh.yos.hani@gmail.com",
+                                to: email,
+                                subject,
+                                htmlMessage
+                                )
+                {
+                    IsBodyHtml = true
+                });
         }
 
      

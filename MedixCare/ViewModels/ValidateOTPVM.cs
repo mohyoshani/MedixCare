@@ -3,6 +3,6 @@
     public class ValidateOTPVM
     {
         public string OTP { get; set; } = string.Empty;
-        public string UserId { get; set; } = null!;
+        public string userId { get; set; } = null!;
     }
 }

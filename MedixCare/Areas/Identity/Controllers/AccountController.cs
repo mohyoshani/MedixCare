@@ -58,18 +58,21 @@ namespace MedixCare.area.Identity.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
+            
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+                TempData["error"] = "Failed To Register";
                 return View(model);
             }
             bool isEmailSent = await SendEmailConfirmation(user);
             if (!isEmailSent)
             {
                 TempData["error"] = "Try Registering again later, Failed to send confirmation email";
+                return RedirectToAction(nameof(ResendConfirmationEmail));
             }
             else
             {
@@ -77,7 +80,7 @@ namespace MedixCare.area.Identity.Controllers
             }
 
            
-            return RedirectToAction(nameof(Login), "Account", new { area = SD.IDENTITY_AREA });
+            return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
         }
 
         //-----------------------Confirmation Email-----------------------------
@@ -128,7 +131,7 @@ namespace MedixCare.area.Identity.Controllers
 
             else
             {
-                TempData["success"] = "Confirmation Email Sent Successfully";
+                TempData["success"] = "Confirmation Email Sent Successfully , Please check your email.";
             }
             return RedirectToAction(nameof(Login));
         }
@@ -166,11 +169,11 @@ namespace MedixCare.area.Identity.Controllers
 
                 if (result.IsNotAllowed)
                 {
-                    ModelState.AddModelError(string.Empty, "Access Denied");
+                    ModelState.AddModelError(string.Empty, "Your email is not confirmed yet. Please check your inbox or resend confirmation email.");
                 }
                 return View(model);
             }
-
+            TempData["success"] = $"Welcome {user!.FullName} , Login Successful";
             return RedirectToAction("Index", "Home", new { area = SD.CUSTOMER_AREA });
 
         }
@@ -232,7 +235,7 @@ namespace MedixCare.area.Identity.Controllers
 
             var model = new ValidateOTPVM
             {
-                UserId = userId
+                userId = userId
             };
             return View(model);
         }
@@ -245,7 +248,7 @@ namespace MedixCare.area.Identity.Controllers
                 return View(model);
             }
 
-            var OTPInDb = await _userOTP.GetOneAsync(a => a.ApplicationUserId == model.UserId && !a.IsUsed, cancellationToken: default , Tracked: false);
+            var OTPInDb = await _userOTP.GetOneAsync(a => a.ApplicationUserId == model.userId && !a.IsUsed, cancellationToken: default , Tracked: true);
 
             if (OTPInDb is null)
             {
@@ -262,7 +265,7 @@ namespace MedixCare.area.Identity.Controllers
             _userOTP.Update(OTPInDb);
             await _userOTP.CommitChangesAsync(cancellationToken: default);
 
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(model.userId);
             if (user is null)
             {
                 ModelState.AddModelError("", "User account no longer exists.");
@@ -346,6 +349,16 @@ namespace MedixCare.area.Identity.Controllers
         {
             try
             {
+                var oldOtps = await _userOTP.GetAllAsync(a => a.ApplicationUserId == user.Id && !a.IsUsed && a.ExpireIn > DateTime.UtcNow);
+
+                if (oldOtps is not null && oldOtps.Any())
+                {
+                    foreach (var oldOtp in oldOtps)
+                    {
+                        oldOtp!.IsUsed = true;
+                        _userOTP.Update(oldOtp);
+                    }
+                }
                 var otp = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
                 await _emailSender.SendEmailAsync(user.Email!, $"Your OTP Code", $"Your OTP code is: {otp}");
                 var userOtp = new ApplicationUserOTP

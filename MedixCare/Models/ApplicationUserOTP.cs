@@ -6,7 +6,7 @@
         [Required]
         public string OTP { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime ExpireIn { get; set; } = DateTime.UtcNow.AddMinutes(60);
+        public DateTime ExpireIn { get; set; } = DateTime.UtcNow.AddMinutes(5);
 
         public bool IsUsed { get; set; } = false;
         public string ApplicationUserId { get; set; } = string.Empty;

@@ -15,7 +15,7 @@
             _context = context;
             _logger = logger;
         }
-        public async Task  Initialize()
+        public async Task Initialize()
         {
             try
             {

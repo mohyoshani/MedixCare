@@ -1,8 +1,8 @@
 ﻿namespace MedixCare.ViewModels
 {
-    public interface ResendEmailConfirmationVM
+    public class ResendEmailConfirmationVM
     {
         [Required]
-        public string EmailOrUserName { get; set; } 
+        public string EmailOrUserName { get; set; }  = string.Empty;
     }
 }

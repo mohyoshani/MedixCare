@@ -1,7 +1,8 @@
 using MedixCare.DataAccess;
+using MedixCare.Utility.DbInitialiZer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace MedixCare
@@ -27,9 +28,12 @@ namespace MedixCare
             {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequiredLength = 8;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
             })
              .AddEntityFrameworkStores<ApplicationDbContext>()
              .AddDefaultTokenProviders();
@@ -48,8 +52,6 @@ namespace MedixCare
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -73,6 +75,11 @@ namespace MedixCare
                 pattern: "{controller=Home}/{action=Index}/{id?}" 
                 ,defaults: new { area = "Customer" })
                 .WithStaticAssets();
+
+            using var scope = app.Services.CreateScope();
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+            dbInitializer.Initialize();
+            
 
             app.Run();
         }

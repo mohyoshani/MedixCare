@@ -287,7 +287,7 @@ namespace MedixCare.area.Identity.Controllers
 
             var model = new ResetPasswordVM
             {
-                UserId = userId,
+                userId = userId,
                 Token = token
             };
             return View(model);
@@ -301,7 +301,7 @@ namespace MedixCare.area.Identity.Controllers
             {
                 return View(model);
             }
-            var userId = model.UserId;
+            var userId = model.userId;
             var user = await _userManager.FindByIdAsync(userId!);
 
             if (user is null)

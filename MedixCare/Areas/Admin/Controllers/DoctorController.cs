@@ -1,0 +1,124 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace MedixCare.Areas.Admin.Controllers
+{
+    [Area(SD.ADMIN_AREA)]
+    public class DoctorController : Controller
+    {
+        private readonly IRepository<Doctor> _doctorRepo;
+        private readonly IRepository<Clinic> _clinicRepo;
+
+        public DoctorController(IRepository<Doctor> doctorRepo, IRepository<Clinic> clinicRepo)
+        {
+            _doctorRepo = doctorRepo;
+            _clinicRepo = clinicRepo;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var doctors = await _doctorRepo.GetAllAsync(null, includes: q => q.Include(d => d.Clinic));
+            return View(doctors);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var doctor = await _doctorRepo.GetOneAsync(d => d.Id == id, includes: q => q.Include(d => d.Clinic));
+            if (doctor is null)
+            {
+                return NotFound();
+            }
+            return View(doctor);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            var clinics = await _clinicRepo.GetAllAsync(null);
+            ViewBag.Clinics = new SelectList(clinics, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Doctor doctor)
+        {
+            if (!ModelState.IsValid)
+            {
+                var clinics = await _clinicRepo.GetAllAsync(null);
+                ViewBag.Clinics = new SelectList(clinics, "Id", "Name");
+                return View(doctor);
+            }
+
+            await _doctorRepo.CreateAsync(doctor, default);
+            await _doctorRepo.CommitChangesAsync();
+            TempData["success"] = "Doctor Created Successfully";
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var doctor = await _doctorRepo.GetOneAsync(d => d.Id == id);
+            if (doctor is null)
+            {
+                return NotFound();
+            }
+
+            var clinics = await _clinicRepo.GetAllAsync(null);
+            ViewBag.Clinics = new SelectList(clinics, "Id", "Name", doctor.ClinicId);
+            return View(doctor);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Doctor doctor)
+        {
+            if (id != doctor.Id)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var clinics = await _clinicRepo.GetAllAsync(null);
+                ViewBag.Clinics = new SelectList(clinics, "Id", "Name", doctor.ClinicId);
+                return View(doctor);
+            }
+
+            _doctorRepo.Update(doctor);
+            await _doctorRepo.CommitChangesAsync();
+            TempData["success"] = "Doctor Updated Successfully";
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var doctor = await _doctorRepo.GetOneAsync(d => d.Id == id, includes: q => q.Include(d => d.Clinic));
+            if (doctor is null)
+            {
+                return NotFound();
+            }
+            return View(doctor);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var doctor = await _doctorRepo.GetOneAsync(d => d.Id == id);
+            if (doctor is not null)
+            {
+                try
+                {
+                    _doctorRepo.Delete(doctor);
+                    await _doctorRepo.CommitChangesAsync();
+                    TempData["success"] = "Doctor Deleted Successfully";
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["error"] = "Cannot delete this doctor because it still has appointments or patient history linked to it";
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+    }
+}

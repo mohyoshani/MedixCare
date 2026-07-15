@@ -13,6 +13,12 @@ namespace MedixCare
             services.AddTransient<EmailSender>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
+            services.AddScoped<IRepository<Clinic>, Repository<Clinic>>();
+            services.AddScoped<IRepository<Doctor>, Repository<Doctor>>();
+            services.AddScoped<IRepository<DoctorSchedule>, Repository<DoctorSchedule>>();
+            services.AddScoped<IRepository<DoctorLeave>, Repository<DoctorLeave>>();
+            services.AddScoped<IRepository<PatientHistory>, Repository<PatientHistory>>();
+            services.AddScoped<IRepository<Patient>, Repository<Patient>>();
             
         }
     }

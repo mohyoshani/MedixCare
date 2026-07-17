@@ -1,0 +1,40 @@
+@model IEnumerable<DoctorSchedule>
+
+@{
+    ViewData["Title"] = "Doctor Schedules";
+}
+
+<h1>Doctor Schedules</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Doctor</th>
+            <th>Day Of Week</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Max Patients</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>@item.Doctor?.Name</td>
+            <td>@item.DayOfWeek</td>
+            <td>@item.StartTime</td>
+            <td>@item.EndTime</td>
+            <td>@item.MaxPatients</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

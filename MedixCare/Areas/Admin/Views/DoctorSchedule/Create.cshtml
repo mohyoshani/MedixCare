@@ -1,0 +1,36 @@
+@model DoctorSchedule
+
+@{
+    ViewData["Title"] = "Create Doctor Schedule";
+}
+
+<h1>Create Doctor Schedule</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="DoctorId" class="form-label"></label>
+        <select asp-for="DoctorId" class="form-select" asp-items="ViewBag.Doctors"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DayOfWeek" class="form-label"></label>
+        <select asp-for="DayOfWeek" class="form-select" asp-items="Html.GetEnumSelectList<DayOfWeek>()"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="StartTime" class="form-label"></label>
+        <input asp-for="StartTime" type="time" class="form-control" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EndTime" class="form-label"></label>
+        <input asp-for="EndTime" type="time" class="form-control" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MaxPatients" class="form-label"></label>
+        <input asp-for="MaxPatients" class="form-control" />
+        <span asp-validation-for="MaxPatients" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

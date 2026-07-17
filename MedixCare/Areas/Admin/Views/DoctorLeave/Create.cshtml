@@ -1,0 +1,32 @@
+@model DoctorLeave
+
+@{
+    ViewData["Title"] = "Create Doctor Leave";
+}
+
+<h1>Create Doctor Leave</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="DoctorId" class="form-label"></label>
+        <select asp-for="DoctorId" class="form-select" asp-items="ViewBag.Doctors"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Reason" class="form-label"></label>
+        <input asp-for="Reason" class="form-control" />
+        <span asp-validation-for="Reason" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LeaveFrom" class="form-label"></label>
+        <input asp-for="LeaveFrom" type="date" class="form-control" />
+        <span asp-validation-for="LeaveFrom" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LeaveTo" class="form-label"></label>
+        <input asp-for="LeaveTo" type="date" class="form-control" />
+        <span asp-validation-for="LeaveTo" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

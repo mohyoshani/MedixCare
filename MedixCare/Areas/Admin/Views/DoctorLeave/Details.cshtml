@@ -1,0 +1,21 @@
+@model DoctorLeave
+
+@{
+    ViewData["Title"] = "Doctor Leave Details";
+}
+
+<h1>Doctor Leave Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Doctor</dt>
+    <dd class="col-sm-10">@Model.Doctor?.Name</dd>
+    <dt class="col-sm-2">Reason</dt>
+    <dd class="col-sm-10">@Model.Reason</dd>
+    <dt class="col-sm-2">Leave From</dt>
+    <dd class="col-sm-10">@Model.LeaveFrom.ToShortDateString()</dd>
+    <dt class="col-sm-2">Leave To</dt>
+    <dd class="col-sm-10">@Model.LeaveTo.ToShortDateString()</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

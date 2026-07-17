@@ -1,0 +1,46 @@
+@model Doctor
+
+@{
+    ViewData["Title"] = "Create Doctor";
+}
+
+<h1>Create Doctor</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Specialty" class="form-label"></label>
+        <input asp-for="Specialty" class="form-control" />
+        <span asp-validation-for="Specialty" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ClinicId" class="form-label"></label>
+        <select asp-for="ClinicId" class="form-select" asp-items="ViewBag.Clinics"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ExaminationFee" class="form-label"></label>
+        <input asp-for="ExaminationFee" class="form-control" />
+        <span asp-validation-for="ExaminationFee" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FollowUpFee" class="form-label"></label>
+        <input asp-for="FollowUpFee" class="form-control" />
+        <span asp-validation-for="FollowUpFee" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FollowUpDays" class="form-label"></label>
+        <input asp-for="FollowUpDays" class="form-control" />
+        <span asp-validation-for="FollowUpDays" class="text-danger"></span>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

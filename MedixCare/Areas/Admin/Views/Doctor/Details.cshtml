@@ -1,0 +1,27 @@
+@model Doctor
+
+@{
+    ViewData["Title"] = "Doctor Details";
+}
+
+<h1>Doctor Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Name</dt>
+    <dd class="col-sm-10">@Model.Name</dd>
+    <dt class="col-sm-2">Specialty</dt>
+    <dd class="col-sm-10">@Model.Specialty</dd>
+    <dt class="col-sm-2">Clinic</dt>
+    <dd class="col-sm-10">@Model.Clinic?.Name</dd>
+    <dt class="col-sm-2">Examination Fee</dt>
+    <dd class="col-sm-10">@Model.ExaminationFee</dd>
+    <dt class="col-sm-2">Follow Up Fee</dt>
+    <dd class="col-sm-10">@Model.FollowUpFee</dd>
+    <dt class="col-sm-2">Follow Up Days</dt>
+    <dd class="col-sm-10">@Model.FollowUpDays</dd>
+    <dt class="col-sm-2">Is Active</dt>
+    <dd class="col-sm-10">@Model.IsActive</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

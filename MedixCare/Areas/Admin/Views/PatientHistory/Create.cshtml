@@ -1,0 +1,36 @@
+@model PatientHistory
+
+@{
+    ViewData["Title"] = "Create Patient History";
+}
+
+<h1>Create Patient History</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="PatientId" class="form-label"></label>
+        <select asp-for="PatientId" class="form-select" asp-items="ViewBag.Patients"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DoctorId" class="form-label"></label>
+        <select asp-for="DoctorId" class="form-select" asp-items="ViewBag.Doctors"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EntryDate" class="form-label"></label>
+        <input asp-for="EntryDate" type="date" class="form-control" />
+        <span asp-validation-for="EntryDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

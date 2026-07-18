@@ -2,7 +2,10 @@
 {
     public enum Gender
     {
+        [Display(Name = "Male")]
         Male,
+
+        [Display(Name = "Female")]
         Female
     }
     public class Patient
@@ -14,9 +17,9 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public Gender Gender { get; set; }
         public bool IsActive { get; set; } 
-        public ICollection<PatientHistory> PatientHistories { get; set; } = new List<PatientHistory>();
-        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-        public ICollection<LabTest> LabTests { get; set; } = new List<LabTest>();
+        public ICollection<PatientHistory>? PatientHistories { get; set; } 
+        public ICollection<Appointment>? Appointments { get; set; } 
+        public ICollection<LabTest>? LabTests { get; set; } 
     }
 
 }

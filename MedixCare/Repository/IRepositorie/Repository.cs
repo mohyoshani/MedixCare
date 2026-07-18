@@ -78,7 +78,7 @@ namespace MedixCare.Repository.IRepositorie
             _dbSet.Update(entity);
         }
 
-        public async Task<IEnumerable<T?>> GetAllAsync(Expression<Func<T, bool>>? filter, CancellationToken cancellationToken, bool Tracked, Func<IQueryable<T>, IQueryable<T>>? includes)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter, CancellationToken cancellationToken, bool Tracked, Func<IQueryable<T>, IQueryable<T>>? includes)
         {
             var query = _dbSet.AsQueryable();
             if (filter is not null)

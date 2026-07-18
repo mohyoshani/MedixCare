@@ -26,7 +26,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Controllers\" />
     <Folder Include="DataAccess\Migrations\" />
-    <Folder Include="Services\IServices\" />
     <Folder Include="wwwroot\MedicalAttachments\labs\" />
     <Folder Include="wwwroot\MedicalAttachments\scans\" />
   </ItemGroup>

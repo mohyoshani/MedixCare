@@ -19,6 +19,8 @@ namespace MedixCare
             services.AddScoped<IRepository<DoctorLeave>, Repository<DoctorLeave>>();
             services.AddScoped<IRepository<PatientHistory>, Repository<PatientHistory>>();
             services.AddScoped<IRepository<Patient>, Repository<Patient>>();
+            services.AddScoped<IRepository<Appointment>, Repository<Appointment>>();
+            services.AddScoped<IRepository<Patient> , Repository<Patient>>();
             
         }
     }

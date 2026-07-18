@@ -1,0 +1,196 @@
+﻿@model PatientVM
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Patients List</h2>
+        <a asp-action="Create" class="btn btn-success fw-semibold">
+            <i class="bi bi-person-plus-fill me-1"></i> Add New Patient
+        </a>
+    </div>
+
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-action="Index" class="row g-2 align-items-center">
+                <div class="col-md-9">
+                    <input type="text"
+                           name="query"
+                           value="@Model.query"
+                           class="form-control"
+                           placeholder="Search by patient name..." />
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100 fw-semibold">Search</button>
+                    @if (!string.IsNullOrEmpty(Model.query))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary w-100">Clear</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Name</th>
+                            <th>Mobile Number</th>
+                            <th>Date of Birth</th>
+                            <th>Created At</th>
+                            <th class="text-center">Appointments</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Patients != null && Model.Patients.Any())
+                        {
+                            foreach (var patient in Model.Patients)
+                            {
+                                <tr>
+                                    <td class="ps-4">@patient.Id</td>
+                                    <td class="fw-semibold">@patient.Name</td>
+                                    <td>@(patient.MobileNumber ?? "N/A")</td>
+                                    <td>@(patient.DateOfBirth.ToString("yyyy-MM-dd"))</td>
+                                    <td>@patient.CreatedAt.ToString("yyyy-MM-dd")</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-dark border fw-semibold px-2.5">
+                                            @(patient.Appointments?.Count ?? 0)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @switch (patient.Gender)
+                                        {
+                                            case Gender.Male:
+                                                <span class="badge bg-info-subtle text-info px-2.5">Male</span>
+                                                break;
+                                            case Gender.Female:
+                                                <span class="badge bg-danger-subtle text-danger px-2.5">Female</span>
+                                                break;
+                                            default:
+                                                <span class="text-muted">N/A</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (patient.IsActive)
+                                        {
+                                            <span class="badge bg-success-subtle text-success px-2.5">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary-subtle text-secondary px-2.5">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <a asp-action="Update" asp-route-id="@patient.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                        <form asp-action="Delete" asp-route-id="@patient.Id" method="post" asp-area="Admin" class="delete-form">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="9" class="text-center py-4 text-muted">
+                                    <i class="bi bi-info-circle me-1"></i> No patients found.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    @if (Model.totalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item @(Model.currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(Model.currentPage - 1)"
+                       asp-route-query="@Model.query">
+                        Previous
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= (int)Model.totalPages; i++)
+                {
+                    <li class="page-item @(Model.currentPage == i ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@i"
+                           asp-route-query="@Model.query">
+                            @i
+                        </a>
+                    </li>
+                }
+
+  
+                <li class="page-item @(Model.currentPage >= Model.totalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(Model.currentPage + 1)"
+                       asp-route-query="@Model.query">
+                        Next
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    }
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function () {
+        const form = this.closest('.delete-form');
+        Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to delete this patient permanently!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+        }).then((result) => {
+        if (result.isConfirmed) {
+        form.submit();
+        }
+        });
+        });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                Swal.fire({
+                title: 'Success!',
+                text: '@TempData["Success"]',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+                });
+            </text>
+        }
+        });
+    </script>
+}

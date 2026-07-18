@@ -1,0 +1,74 @@
+﻿@model UpdatePatientVM
+
+@{
+    ViewData["Title"] = "Update Patient";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i>Update Patient Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Update" method="post" asp-route-id = "@Model.Id">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-semibold">Full Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter patient's full name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+            
+                        <div class="mb-3">
+                            <label asp-for="MobileNumber" class="form-label fw-semibold">Mobile Number</label>
+                            <input asp-for="MobileNumber" class="form-control" placeholder="e.g., 01xxxxxxxxx" />
+                            <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="row align-items-center">
+             
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DateOfBirth" class="form-label fw-semibold">Date of Birth</label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold d-block">Account Status</label>
+                                <div class="form-check form-switch pt-2">
+                                    <input class="form-check-input" type="checkbox" asp-for="isActive" id="isActiveSwitch" />
+                                    <label class="form-check-label font-monospace" for="isActiveSwitch">Active Patient</label>
+                                </div>
+                                <span asp-validation-for="isActive" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-success px-4 fw-semibold">
+                                <i class="bi bi-check-circle me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+ 
+    <partial name="_ValidationScriptsPartial" />
+}

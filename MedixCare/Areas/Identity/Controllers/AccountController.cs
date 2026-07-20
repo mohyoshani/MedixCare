@@ -68,17 +68,17 @@ namespace MedixCare.area.Identity.Controllers
                 TempData["error"] = "Failed To Register";
                 return View(model);
             }
-            //bool isEmailSent = await SendEmailConfirmation(user);
-            //if (!isEmailSent)
-            //{
-            //    TempData["error"] = "Try Registering again later, Failed to send confirmation email";
-            //    return RedirectToAction(nameof(ResendConfirmationEmail));
-            //}
-            //else
-            //{
-            //    TempData["success"] = "Account Registered Successfully. Please check your email.";
-            //}
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            bool isEmailSent = await SendEmailConfirmation(user);
+            if (!isEmailSent)
+            {
+                TempData["error"] = "Try Registering again later, Failed to send confirmation email";
+                return RedirectToAction(nameof(ResendConfirmationEmail));
+            }
+            else
+            {
+                TempData["success"] = "Account Registered Successfully. Please check your email.";
+            }
+
 
             return RedirectToAction("Create", "Patient", new { area = SD.CUSTOMER_AREA });
         }

@@ -9,7 +9,6 @@
         public string? DoctorName { get; set; }
         public VisitType VisitType { get; set; }
         public int PatientId { get; set; }
-
         public AppointmentStatus Status { get; set; }
         public IEnumerable<Patient>? PatientsList { get; set; }
         public IEnumerable<DoctorSchedule>? DoctorSchedules { get; set; }

@@ -52,3 +52,15 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    var ctx = document.getElementById("myAreaChart");
+    if (!ctx) return; // ✅ لو الـ canvas مش موجود، اخرج بدون ما تعمل حاجة
+
+    // ... باقي الكود بتاع الـ Chart
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: { ... },
+        options: { ... }
+    });
+});

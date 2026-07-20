@@ -21,7 +21,7 @@ namespace MedixCare.Areas.Admin.Controllers
                 filter: null,
                 cancellationToken: cancellationToken,
                 Tracked: false,
-                includes: i => i.Include(t => t.Appointment).ThenInclude(i => i!.Doctor));
+                includes: i => i.Include(t => t.Appointment).ThenInclude(x => x!.Doctor).Include(x => x.Patient));
 
             //search
             if (!string.IsNullOrEmpty(query))
@@ -48,6 +48,11 @@ namespace MedixCare.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create(int appointmentId, int patientId)
         {
+            if (appointmentId == 0 || patientId == 0)
+            {
+                TempData["error"] = "Invalid Access! A lab test must be created from an active appointment.";
+                return RedirectToAction("Index", "Appointment", new { area = SD.ADMIN_AREA });
+            }
             var model = new CreateLabTestVM()
             {
                 AppointmentId = appointmentId,

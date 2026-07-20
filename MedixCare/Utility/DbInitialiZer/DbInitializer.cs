@@ -25,11 +25,11 @@
                 {
                     await _roleManager.CreateAsync(new IdentityRole(SD.SuperAdmin_Role));
                     await _roleManager.CreateAsync(new IdentityRole(SD.Admin_Role));
-                    await _roleManager.CreateAsync(new IdentityRole(SD.Customer_Role));
                     await _roleManager.CreateAsync(new IdentityRole(SD.Employee_Role));
                     await _roleManager.CreateAsync(new IdentityRole(SD.Doctor_Role));
+                    //await _roleManager.CreateAsync(new IdentityRole(SD.Customer_Role));
 
-                   await _userManager.CreateAsync(new ApplicationUser
+                    await _userManager.CreateAsync(new ApplicationUser
                    {
                        FullName = "SuperAdmin",
                        Email = "SuperAdmin@Domain.com",

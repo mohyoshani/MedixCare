@@ -7,7 +7,7 @@
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-info text-white py-2">
                     <h6 class="mb-0">
-                        <i class="bi bi-clock-history"></i> Working Hours for: Dr. @Model.DoctorName
+                        <i class="bi bi-clock-history"></i> Working Hours for: @Model.DoctorName
                     </h6>
                 </div>
                 <div class="card-body">
@@ -62,11 +62,11 @@
 
                     
                         <div class="mb-4">
-                            <label asp-for="AppointmentDate" class="form-label fw-bold">Appointment Date & Time:</label>
+                            <label asp-for="AppointmentDate" class="form-label fw-bold">Appointment Date:</label>
                             <input asp-for="AppointmentDate"
                                    type="date"
-                                   asp-format="{0:yyyy-MM-ddTHH:mm}"
-                                   class="form-control form-control-lg" value="@Model.AppointmentDate.ToString("yyyy-MM-ddTHH:mm")" />
+                                   value="@Model.AppointmentDate.ToString("yyyy-MM-dd")"
+                                   class="form-control form-control-lg" />
                             <span asp-validation-for="AppointmentDate" class="text-danger small"></span>
                         </div>
                         <div class="mb-4">

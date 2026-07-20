@@ -44,3 +44,9 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
+document.addEventListener("DOMContentLoaded", function () {
+    var ctx = document.getElementById("myBarChart");
+    if (!ctx) return; // ✅
+
+    // ...
+});

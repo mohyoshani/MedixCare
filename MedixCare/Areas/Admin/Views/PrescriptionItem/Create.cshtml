@@ -1,0 +1,37 @@
+@model PrescriptionItem
+
+@{
+    ViewData["Title"] = "Create Prescription Item";
+}
+
+<h1>Create Prescription Item</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="PrescriptionId" class="form-label"></label>
+        <select asp-for="PrescriptionId" class="form-select" asp-items="ViewBag.Prescriptions"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MedicineName" class="form-label"></label>
+        <input asp-for="MedicineName" class="form-control" />
+        <span asp-validation-for="MedicineName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Dosage" class="form-label"></label>
+        <input asp-for="Dosage" class="form-control" />
+        <span asp-validation-for="Dosage" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MedicineFrequency" class="form-label"></label>
+        <input asp-for="MedicineFrequency" class="form-control" />
+        <span asp-validation-for="MedicineFrequency" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DurationInDays" class="form-label"></label>
+        <input asp-for="DurationInDays" class="form-control" />
+        <span asp-validation-for="DurationInDays" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

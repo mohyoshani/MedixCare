@@ -12,9 +12,9 @@ namespace MedixCare.DataAccess.ModelConfigurations
                    .IsRequired()
                    .HasMaxLength(150);
 
-            builder.Property(lt => lt.TestType)
-                   .IsRequired()
-                   .HasMaxLength(100);
+            builder.Property(lt => lt.testType)
+                   .IsRequired();
+                  
 
             builder.Property(lt => lt.LabName)
                    .IsRequired()
@@ -22,9 +22,6 @@ namespace MedixCare.DataAccess.ModelConfigurations
 
             builder.Property(lt => lt.Summary)
                    .HasMaxLength(1000);
-
-            builder.Property(lt => lt.TestFileName)
-                   .HasMaxLength(255); 
 
             builder.Property(lt => lt.TestDate)
                    .IsRequired();

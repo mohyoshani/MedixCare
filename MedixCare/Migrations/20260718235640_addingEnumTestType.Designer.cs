@@ -4,6 +4,7 @@ using MedixCare.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedixCare.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260718235640_addingEnumTestType")]
+    partial class addingEnumTestType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,9 +72,6 @@ namespace MedixCare.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PatientId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -97,8 +97,6 @@ namespace MedixCare.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -145,6 +143,9 @@ namespace MedixCare.Migrations
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("BookingChannel")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -319,6 +320,11 @@ namespace MedixCare.Migrations
                     b.Property<DateTime>("TestDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("TestFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("TestName")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -334,28 +340,6 @@ namespace MedixCare.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("LabTests");
-                });
-
-            modelBuilder.Entity("MedixCare.Models.LabTestAttachment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LabTestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LabTestId");
-
-                    b.ToTable("LabTestsAttachment");
                 });
 
             modelBuilder.Entity("MedixCare.Models.Patient", b =>
@@ -623,15 +607,6 @@ namespace MedixCare.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MedixCare.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("MedixCare.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId");
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("MedixCare.Models.ApplicationUserOTP", b =>
                 {
                     b.HasOne("MedixCare.Models.ApplicationUser", "ApplicationUser")
@@ -719,17 +694,6 @@ namespace MedixCare.Migrations
                     b.Navigation("Appointment");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("MedixCare.Models.LabTestAttachment", b =>
-                {
-                    b.HasOne("MedixCare.Models.LabTest", "LabTest")
-                        .WithMany("Attachments")
-                        .HasForeignKey("LabTestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LabTest");
                 });
 
             modelBuilder.Entity("MedixCare.Models.PatientHistory", b =>
@@ -843,11 +807,6 @@ namespace MedixCare.Migrations
                     b.Navigation("DoctorLeaves");
 
                     b.Navigation("DoctorSchedules");
-                });
-
-            modelBuilder.Entity("MedixCare.Models.LabTest", b =>
-                {
-                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("MedixCare.Models.Patient", b =>

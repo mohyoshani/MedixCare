@@ -1,0 +1,80 @@
+﻿@model CreateFollowUpVM
+
+@{
+    ViewData["Title"] = "Schedule Follow-Up";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="card-title mb-0 d-flex align-items-center">
+                        <i class="bi bi-arrow-repeat me-2"></i> Schedule New Follow-Up
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+
+                    <div class="alert alert-info py-2 small mb-4" role="alert">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        Creating a follow-up visit linked to parent appointment (#@Model.parentId)
+                    </div>
+
+    
+                    <form asp-action="CreateFollowUp" asp-route-parentId="@Model.parentId" method="post" asp-route-doctorId="@Model.doctorId" asp-route-patientId="@Model.patientId">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary">
+                                <i class="bi bi-person-fill"></i> Patient Name
+                            </label>
+                            <input type="text" class="form-control bg-light border-2" value="@Model.PatientName" readonly />
+                        </div>
+
+ 
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary">
+                                <i class="bi bi-heart-pulse-fill"></i> Doctor Name
+                            </label>
+                            <input type="text" class="form-control bg-light border-2" value="@Model.DoctorName" readonly />
+                        </div>
+
+                        <hr class="text-muted my-4" />
+
+                        <div class="mb-4">
+                            <label asp-for="AppointmentDate" class="form-label fw-bold text-dark">
+                                <i class="bi bi-calendar-event-fill text-success me-1"></i> Choose Follow-Up Date & Time
+                            </label>
+                            <input asp-for="AppointmentDate"
+                                   type="datetime-local"
+                                   asp-format="{0:yyyy-MM-ddTHH:mm}"
+                                   class="form-control form-control-lg shadow-sm border-success-subtle custom-datetime-input" />
+                            <span asp-validation-for="AppointmentDate" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+               
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success px-4 fw-bold">
+                                <i class="bi bi-check-circle"></i> Save Follow-Up
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

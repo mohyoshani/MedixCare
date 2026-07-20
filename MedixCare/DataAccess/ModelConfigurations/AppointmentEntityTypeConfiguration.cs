@@ -9,7 +9,6 @@ namespace MedixCare.DataAccess.ModelConfigurations
             builder.HasKey(a => a.Id);
             builder.Property(a => a.AppointmentDate).IsRequired();
             builder.Property(a => a.CreatedAt).IsRequired();
-            builder.Property(a => a.BookingChannel).IsRequired();
             builder.Property(a => a.VisitType).IsRequired();
 
             builder.HasOne(a => a.Doctor)

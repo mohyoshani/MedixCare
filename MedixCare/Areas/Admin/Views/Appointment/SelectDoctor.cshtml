@@ -1,0 +1,100 @@
+﻿@model DoctorSelectVM
+
+<div class="card p-4 shadow-sm border-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary fw-bold">Available Doctors</h3>
+        <span class="badge bg-info text-dark px-3 py-2 fw-semibold">Staff Control Panel</span>
+    </div>
+
+
+    <form method="get" asp-action="SelectDoctor" class="row g-2 mb-4">
+       
+
+        <div class="col-md-9">
+            <input type="text" name="query" value="@Model.query"
+                   class="form-control" placeholder="Search by doctor name..." />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Doctor Name</th>
+                    <th>Specialty</th>
+                    <th>Clinic Name</th>
+                    <td>Examination Fee</td>
+                    <td>FollowUp Fee</td>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Doctors != null && Model.Doctors.Any())
+                {
+                    foreach (var doctor in Model.Doctors)
+                    {
+                        <tr>
+                            <td>@doctor.Name</td>
+                            <td>@doctor.Specialty</td>
+                            <td>@doctor.Clinic?.Name</td>
+                            <td>@doctor.ExaminationFee</td>
+                            <td>@doctor.FollowUpFee</td>
+                            <td>
+                                <a asp-action="Create"
+                                   asp-route-id="@doctor.Id"
+                                   class="btn btn-success px-4 fw-medium">
+                                    Select Doctor
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-muted py-4">No doctors found matching your criteria.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+
+        
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    <a asp-action="SelectDoctor"
+                       asp-route-query="@Model.query"
+                       asp-route-page="@(Model.CurrentPage - 1)"
+                       class="page-link">Previous</a>
+                </li>
+
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                        <a asp-action="SelectDoctor"
+                           asp-route-query="@Model.query"
+                           asp-route-page="@i"
+                           class="page-link">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    <a asp-action="SelectDoctor"
+                       asp-route-query="@Model.query"
+                       asp-route-page="@(Model.CurrentPage + 1)"
+                       class="page-link">Next</a>
+                </li>
+
+            </ul>
+        </nav>
+    }
+</div>

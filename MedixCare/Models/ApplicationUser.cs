@@ -9,5 +9,7 @@ namespace MedixCare.Models
 
         public string FullName { get; set; } = string.Empty;
 
+        public Patient? Patient { get; set; }
+
     }
 }

@@ -13,7 +13,7 @@ namespace MedixCare.DataAccess.ModelConfigurations
 
             builder.Property(p => p.MobileNumber)
                 .IsRequired()
-                .HasMaxLength(15); 
+                .HasMaxLength(11); 
 
             builder.Property(p => p.DateOfBirth)
                 .IsRequired();

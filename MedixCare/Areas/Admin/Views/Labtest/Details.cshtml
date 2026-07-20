@@ -1,0 +1,50 @@
+﻿@model LabTest
+
+@{
+    ViewData["Title"] = "Lab Test Details";
+}
+
+<div class="container mt-4">
+    <h2>Lab Test Details</h2>
+    <hr />
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">Patient:</dt>
+                <dd class="col-sm-8">@Model.Patient?.Name</dd>
+
+                <dt class="col-sm-4">Doctor:</dt>
+                <dd class="col-sm-8">@Model.Appointment?.Doctor?.Name</dd>
+            </dl>
+        </div>
+    </div>
+
+    <h4 class="mt-4">Attachments</h4>
+    <div class="list-group">
+        @if (Model.Attachments != null && Model.Attachments.Any())
+        {
+            @foreach (var file in Model.Attachments)
+            {
+                <a href="/MedicalAttachments/@file.FileName"
+                   target="_blank"
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <span>
+                        <i class="bi bi-file-earmark-text"></i> @file.FileName
+                    </span>
+                    <span class="badge bg-primary rounded-pill">View</span>
+                </a>
+               
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">No attachments found for this test.</div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

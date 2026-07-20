@@ -5,9 +5,9 @@
     {
         private const long MaxFileSize = 20 * 1024 * 1024; 
         private readonly string[] _allowedExtensions = [ ".jpg", ".jpeg", ".png", ".pdf"];
-        private readonly ILogger _logger;
+        private readonly ILogger<FileHandler> _logger;
 
-        public FileHandler(ILogger logger)
+        public FileHandler(ILogger<FileHandler> logger)
         {
             _logger = logger;
         }
@@ -40,8 +40,8 @@
 
             //fileName 
 
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-           
+            var fileName =Path.GetExtension(file.FileName) + "_" + DateTime.UtcNow.ToString();
+
             //filePath
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MedicalAttachments", subFolder);
             if (!Directory.Exists(folderPath))

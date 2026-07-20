@@ -24,7 +24,7 @@ namespace MedixCare.DataAccess
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<LabTest> LabTests { get; set; }
         public DbSet<ApplicationUserOTP> applicationUserOTP { get; set; }
-
+        public DbSet<LabTestAttachment> LabTestsAttachment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,11 +1,6 @@
 ﻿namespace MedixCare.Models
 {
-    public enum BookingChannel
-    {
-        Phone,
-        Online,
-        WalkIn,
-    }
+
     public enum VisitType
     {
         FollowUp,
@@ -21,7 +16,6 @@
     {
         public int Id { get; set; }
         public int? ParentAppointmentId { get; set; }
-        public BookingChannel BookingChannel { get; set; } = BookingChannel.Phone;
         public VisitType VisitType { get; set; } = VisitType.Examination;
         public DateTime AppointmentDate { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -33,5 +27,7 @@
         public Appointment? ParentAppointment { get; set; } 
         public ICollection<LabTest> LabTests { get; set; } = new List<LabTest>();
         public Prescription? Prescription { get; set; }
+      
+  
     }
 }

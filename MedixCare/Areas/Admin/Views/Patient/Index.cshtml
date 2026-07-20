@@ -155,42 +155,27 @@
         </nav>
     }
 </div>
-@section Scripts {
+
+@section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.querySelectorAll('.btn-delete').forEach(button => {
-        button.addEventListener('click', function () {
-        const form = this.closest('.delete-form');
-        Swal.fire({
-        title: 'Are you sure?',
-        text: "You are about to delete this patient permanently!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel'
-        }).then((result) => {
-        if (result.isConfirmed) {
-        form.submit();
-        }
-        });
-        });
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-        @if (TempData["Success"] != null)
-        {
-            <text>
+        document.querySelectorAll('.btn-delete').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const form = this.closest('.delete-form');
                 Swal.fire({
-                title: 'Success!',
-                text: '@TempData["Success"]',
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false
+                    title: 'Are you sure?',
+                    text: "You are about to delete this Patient!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
-            </text>
-        }
+            });
         });
     </script>
 }

@@ -1,0 +1,86 @@
+﻿@model CreateLabTestVM
+
+@{
+    ViewData["Title"] = "Request New Lab Test";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-flask me-2"></i>Request New Lab Test
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create"
+                          asp-route-appointmentId="@Model.AppointmentId"
+                          asp-route-patientId="@Model.PatientId"
+                          method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                      
+                        <div class="mb-3">
+                            <label asp-for="TestName" class="form-label fw-semibold">Test / Scan Name</label>
+                            <input asp-for="TestName" class="form-control" placeholder="e.g., CBC, Chest X-Ray, Liver Functions" />
+                            <span asp-validation-for="TestName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LabName" class="form-label fw-semibold">Lab / Center Name</label>
+                            <input asp-for="LabName" class="form-control" placeholder="Enter preferred laboratory or scan center" />
+                            <span asp-validation-for="LabName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                        
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TestDate" class="form-label fw-semibold">Test Date</label>
+                                <input asp-for="TestDate" type="date" class="form-control" />
+                                <span asp-validation-for="TestDate" class="text-danger"></span>
+                            </div>
+
+                    
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold d-block">Test Type</label>
+                                <div class="pt-2">
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="radio" asp-for="testType" value="@TestType.Scan" id="typeScan" />
+                                        <label class="form-check-label" for="typeScan">Scan</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" asp-for="testType" value="@TestType.Analysis" id="typeAnalysis" />
+                                        <label class="form-check-label" for="typeAnalysis">Analysis</label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="testType" class="text-danger d-block mt-1"></span>
+                            </div>
+                        </div>
+
+                     
+                        <div class="mb-3">
+                            <label asp-for="Summary" class="form-label fw-semibold">Notes / Reason for Request</label>
+                            <textarea asp-for="Summary" class="form-control" rows="3" placeholder="Write clinical notes or reasons for requesting this test..."></textarea>
+                            <span asp-validation-for="Summary" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="bi bi-save me-1"></i> Request Test
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

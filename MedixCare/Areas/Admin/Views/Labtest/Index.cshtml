@@ -1,0 +1,150 @@
+﻿@model LabTestVM
+
+@{
+    ViewData["Title"] = "Lab Te0sts Index";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Medical Lab Tests</h2>
+        <a asp-action="Create" class="btn btn-success fw-semibold">
+            <i class="fas fa-plus me-1"></i> Add New Test
+        </a>
+    </div>
+
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-action="Index" class="row g-2 align-items-center">
+                <div class="col-md-9">
+                    <input type="text"
+                           name="query"
+                           value="@Model.query"
+                           class="form-control"
+                           placeholder="Search by test name..." />
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100 fw-semibold">Search</button>
+                    @if (!string.IsNullOrEmpty(Model.query))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary w-100">Clear</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Test Name</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Assigned Doctor</th>
+                            <th>Lab Name</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.labTests != null && Model.labTests.Any())
+                        {
+                            foreach (var item in Model.labTests)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-semibold">@item.TestName</td>
+                                    <td>
+                                        @switch (item.testType)
+                                        {
+                                            case TestType.Scan:
+                                                <span class="badge bg-info text-dark">Scan</span>
+                                                break;
+                                            case TestType.Analysis:
+                                                <span class="badge bg-warning text-dark">Analysis</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@item.TestDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@(item.Appointment?.Doctor?.Name ?? "N/A")</td>
+                                    <td>@item.LabName</td>
+                                    <td class="text-end pe-4">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">View</a>
+                                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                        
+                                   
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="delete-form d-inline">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    <i class="bi bi-info-circle me-1"></i> No lab tests found.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.currentPage - 1)" asp-route-query="@Model.query">
+                        Previous
+                    </a>
+                </li>
+                @for (int i = 1; i <= (int)Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.currentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-query="@Model.query">
+                            @i
+                        </a>
+                    </li>
+                }
+                <li class="page-item @(Model.currentPage >= Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.currentPage + 1)" asp-route-query="@Model.query">
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('.delete-form');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to delete this lab test permanently!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

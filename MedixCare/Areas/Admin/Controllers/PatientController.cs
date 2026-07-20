@@ -27,8 +27,8 @@ namespace MedixCare.Areas.Admin.Controllers
 
             if (!string.IsNullOrEmpty(query))
             {
-                var filter = query.Trim();
-                patients = patients.Where(m => m.Name.Contains(filter));
+                var filter = query.Trim().ToLower();
+                patients = patients.Where(m => m.Name.ToLower().Contains(filter));
             }
 
             //pagination 
@@ -56,7 +56,7 @@ namespace MedixCare.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreatePatientFlattendVM model , CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(CreatePatientFlattendVM model, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -106,6 +106,7 @@ namespace MedixCare.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+
                 return View(model);
             }
             var patient = await _patientRepo.GetOneAsync(p => p.Id == model.Id , cancellationToken);

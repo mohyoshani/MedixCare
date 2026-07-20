@@ -122,7 +122,7 @@ namespace MedixCare.Areas.Admin.Controllers
 
               
                 var doctor = await _doctorRepo.GetOneAsync(x => x.Id == model.DoctorId, cancellationToken, false, null);
-                if (doctor != null)
+                if (doctor is not null)
                 {
                     model.DoctorName = doctor.Name;
                 }
@@ -155,7 +155,7 @@ namespace MedixCare.Areas.Admin.Controllers
         {
 
             var appointment = await _appointmentRepo.GetOneAsync(x => x.Id == id, cancellationToken, Tracked: false, null);
-            if (appointment == null)
+            if (appointment is null)
             {
                 return NotFound();
             }
@@ -207,7 +207,7 @@ namespace MedixCare.Areas.Admin.Controllers
 
        
             var appointment = await _appointmentRepo.GetOneAsync(x => x.Id == model.Id, cancellationToken, Tracked: true, null);
-            if (appointment == null)
+            if (appointment is null)
             {
                 return NotFound();
             }

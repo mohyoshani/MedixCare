@@ -26,7 +26,7 @@
 
         <div class="ms-auto"></div>
 
-        <!-- Navbar User Dropdown مربوط بالـ Identity -->
+ 
         <ul class="navbar-nav me-3 me-lg-4">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +39,7 @@
                         <li><a class="dropdown-item" href="#!"><i class="fas fa-list me-2 text-muted"></i>Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li>
-                            <!-- ⚠️ فورم تسجيل الخروج لأن الـ Identity بطلب POST لـ Logout -->
+
                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = SD.CUSTOMER_AREA })" method="post">
                                 <button type="submit" class="dropdown-item text-danger fw-semibold">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
@@ -129,15 +129,14 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-file-medical text-secondary"></i></div>
                             Medical History
                         </a>
-
-                        <div class="sb-sidenav-menu-heading">System Settings</div>
-
-           
-                        <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users-cog text-muted"></i></div>
-                            Users Management
-                        </a>
-
+                        @if (User.IsInRole(SD.SuperAdmin_Role))
+                        {
+                            <div class="sb-sidenav-menu-heading">System Settings</div>
+                            <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users-cog text-muted"></i></div>
+                                Users Management
+                            </a>
+                        }
                     </div>
                 </div>
 

@@ -1,0 +1,23 @@
+@model PrescriptionItem
+
+@{
+    ViewData["Title"] = "Prescription Item Details";
+}
+
+<h1>Prescription Item Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Prescription</dt>
+    <dd class="col-sm-10">@Model.Prescription?.Diagnosis</dd>
+    <dt class="col-sm-2">Medicine Name</dt>
+    <dd class="col-sm-10">@Model.MedicineName</dd>
+    <dt class="col-sm-2">Dosage</dt>
+    <dd class="col-sm-10">@Model.Dosage</dd>
+    <dt class="col-sm-2">Frequency</dt>
+    <dd class="col-sm-10">@Model.MedicineFrequency</dd>
+    <dt class="col-sm-2">Duration (Days)</dt>
+    <dd class="col-sm-10">@Model.DurationInDays</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

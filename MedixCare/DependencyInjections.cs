@@ -22,6 +22,8 @@ namespace MedixCare
             services.AddScoped<IRepository<Appointment>, Repository<Appointment>>();
             services.AddScoped<IRepository<Patient> , Repository<Patient>>();
             services.AddScoped<IRepository<LabTest>, Repository<LabTest>>();
+            services.AddScoped<IRepository<Prescription>, Repository<Prescription>>();
+            services.AddScoped<IRepository<PrescriptionItem>, Repository<PrescriptionItem>>();
             services.AddTransient<IFileHandler, FileHandler>();
             
         }

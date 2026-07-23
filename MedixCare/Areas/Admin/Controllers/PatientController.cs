@@ -1,27 +1,62 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedixCare.DataAccess.ModelConfigurations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+ 
     public class PatientController : Controller
     {
         private readonly IRepository<Patient> _patientRepo;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepository<Doctor> _doctorRepo;
 
-
-        public PatientController(IRepository<Patient> _patient)
+        public PatientController(IRepository<Patient> _patient , UserManager<ApplicationUser> userManager , IRepository<Doctor> doctorRepo)
         {
             _patientRepo = _patient;
+            _userManager = userManager;
+            _doctorRepo = doctorRepo;
         }
+
+        [Authorize(Roles = $"{SD.Employee_Role} , {SD.Admin_Role} , {SD.SuperAdmin_Role} , {SD.Doctor_Role}")]
         public async Task<IActionResult> Index(int page = 1, string? query = null , CancellationToken cancellationToken = default)
         {
-            var patients = await _patientRepo.GetAllAsync(
-                filter: null,
-                cancellationToken: cancellationToken,
-                Tracked: false,
-                includes: null
+            IEnumerable<Patient> patients;
+         
+            if (User.IsInRole(SD.Doctor_Role))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if(user is null)
+                {
+                    return NotFound();
+                }
+                var doctor = await _doctorRepo.GetOneAsync(
+                     filter: d => d.Email == user.Email,
+                     cancellationToken: cancellationToken,
+                     Tracked: false
+                 );
+                if(doctor is null)
+                {
+                    return NotFound();
+                }
+
+                patients = await _patientRepo.GetAllAsync(
+                    filter: p => p.Appointments!.Any(a => a.DoctorId == doctor.Id),
+                    cancellationToken: cancellationToken,
+                    Tracked: false
                 );
-            
+            }
+
+            else
+            {
+                patients = await _patientRepo.GetAllAsync(
+                    filter: null,
+                    cancellationToken: cancellationToken,
+                    Tracked: false
+                );
+            }
 
             //search
 
@@ -48,6 +83,7 @@ namespace MedixCare.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{SD.Employee_Role} , {SD.Admin_Role} , {SD.SuperAdmin_Role}")]
         public IActionResult Create()
         {
             var model = new CreatePatientFlattendVM();
@@ -56,6 +92,7 @@ namespace MedixCare.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{SD.Employee_Role} , {SD.Admin_Role} , {SD.SuperAdmin_Role}")]
         public async Task<IActionResult> Create(CreatePatientFlattendVM model, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -80,6 +117,7 @@ namespace MedixCare.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{SD.Employee_Role} , {SD.Admin_Role} , {SD.SuperAdmin_Role}")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
 
@@ -102,6 +140,7 @@ namespace MedixCare.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{SD.Employee_Role} , {SD.Admin_Role} , {SD.SuperAdmin_Role}")]
         public async Task<IActionResult> Update(UpdatePatientVM model , CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -128,6 +167,7 @@ namespace MedixCare.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{SD.Employee_Role} , {SD.Admin_Role} , {SD.SuperAdmin_Role}")]
         public async Task<IActionResult> Delete(int id , CancellationToken cancellationToken = default )
         {
             var patient = await _patientRepo.GetOneAsync(p=>p.Id == id , cancellationToken);

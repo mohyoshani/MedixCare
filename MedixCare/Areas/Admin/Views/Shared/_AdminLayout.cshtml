@@ -1,32 +1,35 @@
-﻿<!DOCTYPE html>
+﻿@using MedixCare.Utility
+
+@{
+    bool isSuperAdmin = User.IsInRole(SD.SuperAdmin_Role);
+    bool isAdmin = User.IsInRole(SD.Admin_Role) || isSuperAdmin;
+    bool isDoctor = User.IsInRole(SD.Doctor_Role);
+    bool isEmployee = User.IsInRole(SD.Employee_Role);
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
     <title>@ViewData["Title"] - MedixCare</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-    <!-- Bootstrap Icons لزوم التناسق مع الجداول اللي عملناها -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     @RenderSection("Styles", required: false)
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
         <a class="navbar-brand ps-3 fw-bold" asp-area="Admin" asp-controller="Home" asp-action="Index">
             <i class="bi bi-heart-pulse-fill text-danger me-1"></i> MedixCare Board
         </a>
-        <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
 
         <div class="ms-auto"></div>
 
- 
         <ul class="navbar-nav me-3 me-lg-4">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +42,6 @@
                         <li><a class="dropdown-item" href="#!"><i class="fas fa-list me-2 text-muted"></i>Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li>
-
                             <form asp-controller="Account" asp-action="Logout" method="post" asp-area="Identity">
                                 <button type="submit" class="dropdown-item text-danger fw-semibold">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
@@ -66,82 +68,106 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
 
-              
+                        <!-- Core Section -->
                         <div class="sb-sidenav-menu-heading">Core</div>
                         <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt text-primary"></i></div>
                             Dashboard
                         </a>
 
-                
-                        <div class="sb-sidenav-menu-heading">Clinic Operations</div>
+                        <!-- Clinic Operations Section -->
+                        @if (isAdmin || isEmployee || isDoctor)
+                        {
+                            <div class="sb-sidenav-menu-heading">Clinic Operations</div>
 
-            
-                        <a class="nav-link" asp-area="Admin" asp-controller="Clinic" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-hospital text-info"></i></div>
-                            Clinics List
-                        </a>
+                            @if (isAdmin)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="Clinic" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-hospital text-info"></i></div>
+                                    Clinics List
+                                </a>
+                            }
 
-           
-                        <a class="nav-link" asp-area="Admin" asp-controller="Appointment" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-check text-success"></i></div>
-                            Appointments
-                        </a>
+                            @if (isAdmin || isEmployee || isDoctor)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="Appointment" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-calendar-check text-success"></i></div>
+                                    Appointments
+                                </a>
+                            }
 
-         
-                        <a class="nav-link" asp-area="Admin" asp-controller="Labtest" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-flask text-warning"></i></div>
-                            Lab Tests
-                        </a>
+                            @if (isAdmin || isDoctor)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="Labtest" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-flask text-warning"></i></div>
+                                    Lab Tests
+                                </a>
+                            }
+                        }
 
-                
-                        <div class="sb-sidenav-menu-heading">Doctors Staff</div>
+                        <!-- Doctors Staff Section -->
+                        @if (isAdmin || isEmployee)
+                        {
+                            <div class="sb-sidenav-menu-heading">Doctors Staff</div>
 
-             
-                        <a class="nav-link" asp-area="Admin" asp-controller="Doctor" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user-md text-primary"></i></div>
-                            Doctors List
-                        </a>
+                            @if (isAdmin || isEmployee)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="Doctor" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user-md text-primary"></i></div>
+                                    Doctors List
+                                </a>
+                            }
 
-            
-                        <a class="nav-link" asp-area="Admin" asp-controller="DoctorSchedule" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-clock text-info"></i></div>
-                            Schedules
-                        </a>
+                            @if (isAdmin || isEmployee || isDoctor)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="DoctorSchedule" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-clock text-info"></i></div>
+                                    Schedules
+                                </a>
 
-                     
-                        <a class="nav-link" asp-area="Admin" asp-controller="DoctorLeave" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-times text-danger"></i></div>
-                            Doctor Leaves
-                        </a>
+                                <a class="nav-link" asp-area="Admin" asp-controller="DoctorLeave" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-calendar-times text-danger"></i></div>
+                                    Doctor Leaves
+                                </a>
+                            }
+                        }
 
-         
-                        <div class="sb-sidenav-menu-heading">Patients & Records</div>
+        
+                        @if (isAdmin || isDoctor || isEmployee)
+                        {
+                            <div class="sb-sidenav-menu-heading">Patients & Records</div>
 
-                        <a class="nav-link" asp-area="Admin" asp-controller="Patient" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user-injured text-success"></i></div>
-                            Patients List
-                        </a>
+                            @if (isAdmin || isDoctor || isEmployee)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="Patient" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user-injured text-success"></i></div>
+                                    Patients List
+                                </a>
+                            }
 
-                        <a class="nav-link" asp-area="Admin" asp-controller="PatientHistory" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-file-medical text-secondary"></i></div>
-                            Medical History
-                        </a>
+                            @if (isAdmin || isDoctor)
+                            {
+                                <a class="nav-link" asp-area="Admin" asp-controller="PatientHistory" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-file-medical text-secondary"></i></div>
+                                    Medical History
+                                </a>
 
-                       
-                        <a class="nav-link" asp-area="Admin" asp-controller="Prescription" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-prescription text-warning"></i></div>
-                            Prescriptions
-                        </a>
+                                <a class="nav-link" asp-area="Admin" asp-controller="Prescription" asp-action="Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-prescription text-warning"></i></div>
+                                    Prescriptions
+                                </a>
+                            }
+                        }
 
-                        @* @if (User.IsInRole(SD.SuperAdmin_Role))
-                        { *@
+                        @if (isSuperAdmin)
+                        {
                             <div class="sb-sidenav-menu-heading">System Settings</div>
                             <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users-cog text-muted"></i></div>
                                 Users Management
                             </a>
-                       @*  } *@
+                        }
+
                     </div>
                 </div>
 

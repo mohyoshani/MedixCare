@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize]
     public class HomeController : Controller
     {
+        
         private readonly ApplicationDbContext _context;
         public HomeController(ApplicationDbContext context)
         {

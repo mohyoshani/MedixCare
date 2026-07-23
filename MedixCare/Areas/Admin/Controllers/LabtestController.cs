@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles=$"{SD.Admin_Role} , {SD.SuperAdmin_Role} , {SD.Doctor_Role}")]
     public class LabtestController : Controller
     {
         private readonly IRepository<LabTest> _repoLabTest;

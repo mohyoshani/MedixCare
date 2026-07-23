@@ -126,7 +126,7 @@
                                     <td class="align-middle text-end text-nowrap">
                                         <div class="d-flex gap-2 justify-content-end">
 
-                                            <a asp-action="CreateFollowUp" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success d-inline-flex align-items-center fw-semibold">
+                                            <a asp-action="CreateFollowUp" asp-route-parentId="@item.Id" class="btn btn-sm btn-outline-success d-inline-flex align-items-center fw-semibold">
                                                 <i class="bi bi-plus-circle me-1"></i> Follow UP
                                             </a>
 
@@ -139,6 +139,13 @@
                                                asp-route-patientId="@item.PatientId"
                                                class="btn btn-sm btn-outline-info d-inline-flex align-items-center fw-semibold">
                                                 <i class="bi bi-flask me-1"></i> Add Lab Test
+                                            </a>
+                                            <a asp-controller="Prescription"
+                                               asp-action="Create"
+                                               asp-route-appointmentId="@item.Id"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Add Prescription">
+                                                <i class="fas fa-file-prescription me-1"></i> Add Prescription
                                             </a>
 
                                             <form class="delete-form d-inline" asp-action="Delete" asp-route-id="@item.Id" method="post">

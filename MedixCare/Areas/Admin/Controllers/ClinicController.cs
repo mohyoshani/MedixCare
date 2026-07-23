@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $"{SD.Admin_Role} , {SD.SuperAdmin_Role}")]
     public class ClinicController : Controller
     {
         private readonly IRepository<Clinic> _clinicRepo;

@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $" {SD.Admin_Role} , {SD.SuperAdmin_Role} , {SD.Doctor_Role}")]
     public class PrescriptionItemController : Controller
     {
         private readonly IRepository<PrescriptionItem> _itemRepo;
@@ -31,28 +34,44 @@ namespace MedixCare.Areas.Admin.Controllers
             return View(item);
         }
 
-        public async Task<IActionResult> Create()
+        // 🟢 1. تعديل الـ GET ليستقبل id الروشتة الممرر من زرار Add Items
+        [HttpGet]
+        public async Task<IActionResult> Create(int id = 0)
         {
             var prescriptions = await _prescriptionRepo.GetAllAsync(null);
-            ViewBag.Prescriptions = new SelectList(prescriptions, "Id", "Diagnosis");
-            return View();
+            ViewBag.Prescriptions = new SelectList(prescriptions, "Id", "Diagnosis", id);
+
+            var model = new PrescriptionItem();
+            if (id != 0)
+            {
+                model.PrescriptionId = id; // ربط الـ Item بالروشتة المحددة
+            }
+
+            return View(model);
         }
 
+        // 🟢 2. تعديل الـ POST لحفظ العنصر وتفادي فشل الـ Validation
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PrescriptionItem item)
         {
+            // 💡 أهم خطوة: إزالة الخاصية المرجعية من الـ Validation
+            ModelState.Remove("Prescription");
+
             if (!ModelState.IsValid)
             {
                 var prescriptions = await _prescriptionRepo.GetAllAsync(null);
-                ViewBag.Prescriptions = new SelectList(prescriptions, "Id", "Diagnosis");
+                ViewBag.Prescriptions = new SelectList(prescriptions, "Id", "Diagnosis", item.PrescriptionId);
                 return View(item);
             }
 
             await _itemRepo.CreateAsync(item, default);
-            await _itemRepo.CommitChangesAsync();
+            await _itemRepo.CommitChangesAsync(); // 👈 الآن سيصل للسطر ده ويسمّع في الداتابيز
+
             TempData["success"] = "Prescription Item Created Successfully";
-            return RedirectToAction(nameof(Index));
+
+            // إعادة التوجيه لصفحة الروشتات الرئيسية بعد الحفظ بنجاح
+            return RedirectToAction("Index", "Prescription");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -76,6 +95,8 @@ namespace MedixCare.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("Prescription");
 
             if (!ModelState.IsValid)
             {

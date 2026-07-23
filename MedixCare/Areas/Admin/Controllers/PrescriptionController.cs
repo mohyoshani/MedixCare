@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $" {SD.Admin_Role} , {SD.SuperAdmin_Role} , {SD.Doctor_Role}")]
     public class PrescriptionController : Controller
     {
         private readonly IRepository<Prescription> _prescriptionRepo;
@@ -17,13 +20,17 @@ namespace MedixCare.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var prescriptions = await _prescriptionRepo.GetAllAsync(null, includes: q => q.Include(p => p.Appointment));
+            var prescriptions = await _prescriptionRepo.GetAllAsync(null, includes: q => q.Include(p => p.Appointment).ThenInclude(a => a!.Patient));
             return View(prescriptions);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var prescription = await _prescriptionRepo.GetOneAsync(p => p.Id == id, includes: q => q.Include(p => p.Appointment));
+            var prescription = await _prescriptionRepo.GetOneAsync(
+                p => p.Id == id,
+                includes: q => q.Include(p => p.Appointment).ThenInclude(a => a!.Patient)
+            );
+
             if (prescription is null)
             {
                 return NotFound();
@@ -31,29 +38,43 @@ namespace MedixCare.Areas.Admin.Controllers
             return View(prescription);
         }
 
-        public async Task<IActionResult> Create()
+        [HttpGet]
+        public async Task<IActionResult> Create(int appointmentId = 0)
         {
             var appointments = await _appointmentRepo.GetAllAsync(null);
-            ViewBag.Appointments = new SelectList(appointments, "Id", "AppointmentDate");
-            return View();
+            ViewBag.Appointments = new SelectList(appointments, "Id", "AppointmentDate", appointmentId);
+
+            var model = new Prescription();
+            if (appointmentId != 0)
+            {
+                model.AppointmentId = appointmentId;
+            }
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Prescription prescription)
         {
+
+            ModelState.Remove("Appointment");
+
             if (!ModelState.IsValid)
             {
                 var appointments = await _appointmentRepo.GetAllAsync(null);
-                ViewBag.Appointments = new SelectList(appointments, "Id", "AppointmentDate");
+                ViewBag.Appointments = new SelectList(appointments, "Id", "AppointmentDate", prescription.AppointmentId);
                 return View(prescription);
             }
 
             prescription.CreatedAt = DateTime.UtcNow;
             await _prescriptionRepo.CreateAsync(prescription, default);
             await _prescriptionRepo.CommitChangesAsync();
+
             TempData["success"] = "Prescription Created Successfully";
-            return RedirectToAction(nameof(Index));
+
+      
+            return RedirectToAction("Create", "PrescriptionItem", new { id = prescription.Id });
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -77,6 +98,8 @@ namespace MedixCare.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("Appointment");
 
             if (!ModelState.IsValid)
             {

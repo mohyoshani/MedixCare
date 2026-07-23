@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedixCare.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $"{SD.Admin_Role} , {SD.SuperAdmin_Role}")]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,11 +27,14 @@ namespace MedixCare.Areas.Admin.Controllers
             var currentPage = page;
 
             //filter by query
-
-            if (query is not null)
+            if (!string.IsNullOrEmpty(query))
             {
-                users = users.Where(u => u.NormalizedUserName!.Contains(query) || u.NormalizedEmail!.Contains(query));
+                var filter = query.ToLower().Trim();
+                
+                users = users.Where(u=>u.UserName!.ToLower().Contains(filter));
             }
+
+          
             var userRoles = new Dictionary<ApplicationUser, string>();
 
             foreach (var item in userList)
@@ -93,6 +98,8 @@ namespace MedixCare.Areas.Admin.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user is null) return NotFound();
+
+
             //يعكس الحالة لوك او انلوك حسب الحالة الحالية اللي جاية من الفيو
             user.LockoutEnabled = !user.LockoutEnabled;
             if (!user.LockoutEnabled)
@@ -102,7 +109,7 @@ namespace MedixCare.Areas.Admin.Controllers
             }
             else
             {
-                TempData["warning"] = $"User {user.UserName} unlocked successfully";
+                TempData["info"] = $"User {user.UserName} unlocked successfully";
                 user.LockoutEnd = null;
             }
 

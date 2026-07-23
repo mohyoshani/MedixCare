@@ -29,6 +29,8 @@
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Edit</a>
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                <a asp-action="Create" asp-controller="PrescriptionItem" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Add Items</a>
+                <a asp-action="Details" asp-controller="PrescriptionItem" asp-route-id="@item.Id" class="btn btn-sm btn-warning">View Items</a>
             </td>
         </tr>
 }

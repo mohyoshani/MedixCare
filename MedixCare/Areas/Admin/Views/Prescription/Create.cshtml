@@ -9,8 +9,8 @@
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
-        <label asp-for="AppointmentId" class="form-label"></label>
-        <select asp-for="AppointmentId" class="form-select" asp-items="ViewBag.Appointments"></select>
+        <label asp-for="AppointmentId" class="form-label"> Appointment Date</label>
+        <select disabled asp-for="AppointmentId" class="form-select" asp-items="ViewBag.Appointments"></select>
     </div>
     <div class="mb-3">
         <label asp-for="Diagnosis" class="form-label"></label>

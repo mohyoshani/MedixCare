@@ -40,7 +40,7 @@
                         <li><hr class="dropdown-divider" /></li>
                         <li>
 
-                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = SD.CUSTOMER_AREA })" method="post">
+                            <form asp-controller="Account" asp-action="Logout" method="post" asp-area="Identity">
                                 <button type="submit" class="dropdown-item text-danger fw-semibold">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                                 </button>
@@ -118,25 +118,30 @@
          
                         <div class="sb-sidenav-menu-heading">Patients & Records</div>
 
-             
                         <a class="nav-link" asp-area="Admin" asp-controller="Patient" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-injured text-success"></i></div>
                             Patients List
                         </a>
 
-                
                         <a class="nav-link" asp-area="Admin" asp-controller="PatientHistory" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-file-medical text-secondary"></i></div>
                             Medical History
                         </a>
-                        @if (User.IsInRole(SD.SuperAdmin_Role))
-                        {
+
+                       
+                        <a class="nav-link" asp-area="Admin" asp-controller="Prescription" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="fas fa-prescription text-warning"></i></div>
+                            Prescriptions
+                        </a>
+
+                        @* @if (User.IsInRole(SD.SuperAdmin_Role))
+                        { *@
                             <div class="sb-sidenav-menu-heading">System Settings</div>
                             <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users-cog text-muted"></i></div>
                                 Users Management
                             </a>
-                        }
+                       @*  } *@
                     </div>
                 </div>
 

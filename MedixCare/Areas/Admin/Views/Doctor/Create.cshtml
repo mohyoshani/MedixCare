@@ -18,6 +18,18 @@
         <input asp-for="Specialty" class="form-control" />
         <span asp-validation-for="Specialty" class="text-danger"></span>
     </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label fw-semibold">Doctor Account Email</label>
+
+        <select asp-for="Email" asp-items="ViewBag.EmailList" class="form-select">
+            <option value="">-- Select Doctor Email from System --</option>
+        </select>
+
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <small class="text-muted">Only users with the "Doctor" role will appear here.</small>
+    </div>
+
     <div class="mb-3">
         <label asp-for="ClinicId" class="form-label"></label>
         <select asp-for="ClinicId" class="form-select" asp-items="ViewBag.Clinics"></select>

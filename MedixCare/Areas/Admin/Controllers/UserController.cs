@@ -76,7 +76,7 @@ namespace MedixCare.Areas.Admin.Controllers
             if (user is null) return NotFound();
 
             var currentRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            if (currentRole != null)
+            if (currentRole is not null)
             {
                 await _userManager.RemoveFromRoleAsync(user, currentRole);
             }

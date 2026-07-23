@@ -11,5 +11,15 @@
     <dd class="col-sm-10">@Model.Name</dd>
 </dl>
 
+<dl class="row">
+<dt class="col-sm-2" > Doctors</dt>
+    @foreach (var item in (IEnumerable<Doctor>)ViewBag.doctors)
+    {
+        <dd>
+            @item.Name
+        </dd>
+    }
+</dl>
+
 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
 <a asp-action="Index" class="btn btn-secondary">Back to List</a>

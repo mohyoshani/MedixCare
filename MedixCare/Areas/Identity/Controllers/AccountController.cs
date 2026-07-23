@@ -69,6 +69,7 @@ namespace MedixCare.area.Identity.Controllers
                 return View(model);
             }
             bool isEmailSent = await SendEmailConfirmation(user);
+            await _userManager.AddToRoleAsync(user, SD.Employee_Role);
             if (!isEmailSent)
             {
                 TempData["error"] = "Try Registering again later, Failed to send confirmation email";
@@ -80,7 +81,7 @@ namespace MedixCare.area.Identity.Controllers
             }
 
 
-            return RedirectToAction("Create", "Patient", new { area = SD.CUSTOMER_AREA });
+            return RedirectToAction("Login", "Account", new { area = SD.CUSTOMER_AREA });
         }
 
         //-----------------------Confirmation Email-----------------------------
@@ -97,7 +98,7 @@ namespace MedixCare.area.Identity.Controllers
                 return RedirectToAction(nameof(Login));
             }
             TempData["success"] = "Account Confirmed Successfully";
-            await _userManager.AddToRoleAsync(user, SD.Customer_Role);
+          
             return RedirectToAction(nameof(Login));
         }
 
@@ -143,6 +144,7 @@ namespace MedixCare.area.Identity.Controllers
         {
             return View();
         }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM model)
@@ -174,7 +176,7 @@ namespace MedixCare.area.Identity.Controllers
                 return View(model);
             }
             TempData["success"] = $"Welcome {user!.FullName} , Login Successful";
-            return RedirectToAction("Index", "Home", new { area = SD.CUSTOMER_AREA });
+            return RedirectToAction("Index", "Home", new { area = SD.ADMIN_AREA });
 
         }
 

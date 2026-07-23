@@ -66,7 +66,7 @@
                         <div class="mb-4">
                             <label asp-for="AppointmentDate" class="form-label fw-bold">Select Appointment Date & Time:</label>
                             <input asp-for="AppointmentDate"
-                                   type="date"
+                                   type="datetime-local"
                                    asp-format="{0:yyyy-MM-ddTHH:mm}"
                                    class="form-control form-control-lg" />
                             <span asp-validation-for="AppointmentDate" class="text-danger small"></span>

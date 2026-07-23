@@ -30,13 +30,48 @@ namespace MedixCare.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
-            var appointments = await _appointmentRepo.GetAllAsync(
-            filter: null,
-            cancellationToken: cancellationToken,
-            Tracked: true,
-            includes: q => q.Include(a => a.Doctor)
-            .Include(a => a.Patient)
-            .ThenInclude(a => a!.Appointments));
+
+
+            IEnumerable<Appointment> appointments;
+
+         
+            if (User.IsInRole(SD.Doctor_Role))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if(user is null)
+                {
+                    return View();
+                }
+                var doctor = await _doctorRepo.GetOneAsync(
+                    filter: d => d.Email == user.Email,
+                    cancellationToken: cancellationToken,
+                    Tracked: false
+                );
+
+                if (doctor == null)
+                {
+                    return NotFound("Doctor profile not found for this account.");
+                }
+
+                    appointments = await _appointmentRepo.GetAllAsync(
+                    filter: a => a.DoctorId == doctor.Id,
+                    cancellationToken: cancellationToken,
+                    Tracked: true,
+                    includes: q => q.Include(a => a.Doctor)
+                    .Include(a => a.Patient)
+                    .ThenInclude(a => a!.Appointments));
+            }
+            else
+            {
+             
+                appointments = await _appointmentRepo.GetAllAsync(
+                    filter: null,
+                    cancellationToken: cancellationToken,
+                    Tracked: true,
+                    includes: q => q.Include(a => a.Doctor)
+                    .Include(a => a.Patient)
+                    .ThenInclude(a => a!.Appointments));
+            }
 
             //search
 
@@ -338,7 +373,7 @@ namespace MedixCare.Areas.Admin.Controllers
             var appointment = await _appointmentRepo.GetOneAsync(
                 filter: x => x.Id == id,
                 cancellationToken: cancellationToken,
-                Tracked: true); 
+                Tracked: true);
 
             if (appointment is null)
             {

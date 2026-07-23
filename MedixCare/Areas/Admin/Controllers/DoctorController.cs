@@ -8,11 +8,15 @@ namespace MedixCare.Areas.Admin.Controllers
     {
         private readonly IRepository<Doctor> _doctorRepo;
         private readonly IRepository<Clinic> _clinicRepo;
-
-        public DoctorController(IRepository<Doctor> doctorRepo, IRepository<Clinic> clinicRepo)
+        private readonly IRepository<Appointment> _appointmentRepo;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public DoctorController(IRepository<Doctor> doctorRepo, IRepository<Clinic> clinicRepo , IRepository<Appointment> appointmentRepo , UserManager<ApplicationUser> userManager)
         {
             _doctorRepo = doctorRepo;
             _clinicRepo = clinicRepo;
+            _appointmentRepo = appointmentRepo;
+            _userManager = userManager;
+
         }
 
         public async Task<IActionResult> Index()
@@ -33,8 +37,10 @@ namespace MedixCare.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
+            var doctorUsers = await _userManager.GetUsersInRoleAsync(SD.Doctor_Role);
             var clinics = await _clinicRepo.GetAllAsync(null);
             ViewBag.Clinics = new SelectList(clinics, "Id", "Name");
+            ViewBag.EmailList =  new SelectList(doctorUsers, "Email", "Email");
             return View();
         }
 
@@ -42,10 +48,15 @@ namespace MedixCare.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Doctor doctor)
         {
+
             if (!ModelState.IsValid)
             {
                 var clinics = await _clinicRepo.GetAllAsync(null);
                 ViewBag.Clinics = new SelectList(clinics, "Id", "Name");
+
+                var doctorUsers = await _userManager.GetUsersInRoleAsync("Doctor");
+                ViewBag.EmailList = new SelectList(doctorUsers, "Email", "Email", doctor.Email);
+
                 return View(doctor);
             }
 
@@ -119,6 +130,13 @@ namespace MedixCare.Areas.Admin.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> ViewAppointments(int id , CancellationToken cancellationToken = default)
+        {
+            var doctorAppointment = await _appointmentRepo.GetAllAsync(c=>c.DoctorId == id , cancellationToken , Tracked: false , c => c.Include(a => a.Patient));
+            return View(doctorAppointment);
         }
     }
 }

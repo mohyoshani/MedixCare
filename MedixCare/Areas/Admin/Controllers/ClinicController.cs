@@ -6,10 +6,12 @@ namespace MedixCare.Areas.Admin.Controllers
     public class ClinicController : Controller
     {
         private readonly IRepository<Clinic> _clinicRepo;
+        private readonly IRepository<Doctor> _doctorRepo;
 
-        public ClinicController(IRepository<Clinic> clinicRepo)
+        public ClinicController(IRepository<Clinic> clinicRepo , IRepository<Doctor> doctorRepo)
         {
             _clinicRepo = clinicRepo;
+            _doctorRepo = doctorRepo;
         }
 
         public async Task<IActionResult> Index()
@@ -25,6 +27,7 @@ namespace MedixCare.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewBag.doctors = await _doctorRepo.GetAllAsync(c => c.ClinicId == id);
             return View(clinic);
         }
 
